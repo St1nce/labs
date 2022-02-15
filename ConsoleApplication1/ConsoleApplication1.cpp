@@ -18,7 +18,7 @@ void data_input()
 	scanf("%s %f %d %s %d", &name, &milk.price, &milk.count, &data, &milk.expiration);
 	milk.name = strcpy(milk.name, name);
 	milk.data = strcpy(milk.data, data);
-	printf("%s %f %d %s %")
+	printf("%s %f %d %s %");
 }
 
 int main()
