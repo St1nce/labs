@@ -1,18 +1,23 @@
 ﻿// ConsoleApplication1.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
 //
 #define _CRT_SECURE_NO_WARNINGS
-#include <iostream>
+#include <locale.h>
 #include <stdio.h>
+#include <string.h> 
 struct product
 {
 	char name[20];
 	char data[20];
 	int price, count, expiration;
-};
+}milk;
 
 int main()
 {
-	printf("ДАРОВА 3");
+	setlocale(LC_ALL, "rus");
+	 char name[20] = "";
+	 milk.count = 10;
+	strcpy(milk.name, name);
+	printf("%d %s", milk.count, milk.name);
 }
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
