@@ -7,15 +7,14 @@
 struct product  
 {
 	char name[20];
-    char date[11];
-	int price=0;
-    int day=0;
-    int month=0;
-    int year=0;
+	int price;
+    int day;
+    int month;
+    int year;
 	int count, expiration;
 };
 
-void Date_Input(int day, int month, int year,char date[])
+void Date_Input(int& day, int& month, int& year)
 {
     char temp[20]; // массив для ввода данных в едином (символьном) формате
     do
@@ -63,7 +62,7 @@ void Date_Input(int day, int month, int year,char date[])
         default:    return;
         }
     } while (1);
-    char date1[11] =
+   /* char date1[11] =
     {
         day / 10 + '0',
         day % 10 + '0',
@@ -77,26 +76,27 @@ void Date_Input(int day, int month, int year,char date[])
         year % 10 + '0',
         '\0'
     };
-    strcpy(date, date1);
+    strcpy(date, date1);*/
     //printf_s("%s\n", date);
     
 }
 
 void data_input()
 {
-    char date[11];
+    /*char date[11];*/
 	char name[20];
+    
 	product milk;
 	printf("Введите данные о товарах в формате:\nНазвание, цена, количество,\nВвод: ");
 	scanf("%s %d %d", &name, &milk.price, &milk.count);
-    Date_Input(milk.day, milk.month, milk.year,date);
+    Date_Input(milk.day, milk.month, milk.year);
     printf("Введите срок годности:");
     scanf("%d",&milk.expiration);
 	strcpy(milk.name, name);
-    //strcpy(milk.date, date);
-
+    /*strcpy(milk.date, date);*/
+    
     //Date_Input(&milk.day, &milk.month, &milk.year);
-	printf("%s %d %d %s %d\n", milk.name, milk.price, milk.count, date, milk.expiration);
+	printf("%s %d %d %d.%d.%d %d\n", milk.name, milk.price, milk.count,milk.day,milk.month,milk.year , milk.expiration);
 }
 
 int main()
