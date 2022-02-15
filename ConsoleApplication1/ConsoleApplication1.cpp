@@ -3,6 +3,12 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <stdio.h>
+struct product
+{
+	char name[20];
+	char data[20];
+	int price, count, expiration;
+};
 
 int main()
 {
