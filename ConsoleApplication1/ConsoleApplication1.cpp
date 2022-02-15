@@ -8,11 +8,16 @@ struct product
 	char name[20];
 	char data[20];
 	int price, count, expiration;
+	
 };
 
 int main()
 {
-	printf("ДАРОВА 3");
+	product sda;
+	sda.count = 1;
+	sda.name = "hello world";
+	printf("%d,%s",sda.count,sda.name);
+	
 }
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
