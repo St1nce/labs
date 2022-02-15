@@ -15,7 +15,7 @@ void data_input()
 	char name[20];
 	char data[20];
 	product milk;
-	printf("Введите данные о товарах в формате:\nНазвание, цена, количество, дата поступления, срок годности\nВвод: ");
+	printf("Введите данные о товарах в формате:\nНазвание, цена, количество, дата поступления (например 20.03.12), срок годности (в днях)\nВвод: ");
 	scanf("%s %f %d %s %d", &name, &milk.price, &milk.count, &data, &milk.expiration);
 	strcpy(milk.name, name);
 	strcpy(milk.data, data);
