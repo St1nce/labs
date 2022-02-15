@@ -6,16 +6,17 @@ struct product
 {
 	char name[20];
 	char data[20];
-	int price;
+	float price;
 	int count, expiration;
-}milk;
+};
 
 void data_input()
 {
 	char name[20];
 	char data[20];
-	printf("Введите данные о товарах в формате:\nНазвание, цена, количество, дата поступления, срок годности\nВвод: ");
-	scanf("%s %d %d %s %d", &name, &milk.price, &milk.count, &data, &milk.expiration);
+	product milk;
+	printf("Введите данные о товарах в формате:\nНазвание, цена, количество, дата поступления (например 20.03.12), срок годности (в днях)\nВвод: ");
+	scanf("%s %f %d %s %d", &name, &milk.price, &milk.count, &data, &milk.expiration);
 	strcpy(milk.name, name);
 	strcpy(milk.data, data);
 	printf("%s %d %d %s %d", &milk.name, &milk.price, &milk.count, &milk.data, &milk.expiration);
