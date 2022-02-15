@@ -93,10 +93,10 @@ void data_input()
     printf("Введите срок годности:");
     scanf("%d",&milk.expiration);
 	strcpy(milk.name, name);
-    strcpy(milk.date, date);
+    //strcpy(milk.date, date);
 
     //Date_Input(&milk.day, &milk.month, &milk.year);
-	printf("%s %d %d %s %d\n", milk.name, milk.price, milk.count, milk.date, milk.expiration);
+	printf("%s %d %d %s %d\n", milk.name, milk.price, milk.count, date, milk.expiration);
 }
 
 int main()
