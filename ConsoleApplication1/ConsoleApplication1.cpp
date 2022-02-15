@@ -16,7 +16,7 @@ int main()
 	product sda;
 	sda.count = 1;
 	sda.name = "hello world";
-	printf("%d,%s",sda.count,sda.name);
+	printf("%d,%s",sda.count);
 	
 }
 
