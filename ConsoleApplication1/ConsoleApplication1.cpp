@@ -3,17 +3,19 @@
 #include <stdio.h>
 #include <string.h> 
 #include <stdlib.h>
-struct product
+#include <Windows.h>
+struct product  
 {
 	char name[20];
-	int day;
-    int month;
-    int year;
-	float price;
+    char date[11];
+	int price=0;
+    int day=0;
+    int month=0;
+    int year=0;
 	int count, expiration;
 };
 
-void Date_Input(int& day, int& month, int& year)
+void Date_Input(int day, int month, int year,char date[])
 {
     char temp[20]; // массив для ввода данных в едином (символьном) формате
     do
@@ -61,21 +63,45 @@ void Date_Input(int& day, int& month, int& year)
         default:    return;
         }
     } while (1);
+    char date1[11] =
+    {
+        day / 10 + '0',
+        day % 10 + '0',
+        '.',
+        month / 10 + '0',
+        month % 10 + '0',
+        '.',
+        year / 1000 + '0',
+        (year / 100) % 10 + '0',
+        (year / 10) % 10 + '0',
+        year % 10 + '0',
+        '\0'
+    };
+    strcpy(date, date1);
+    //printf_s("%s\n", date);
+    
 }
 
 void data_input()
 {
+    char date[11];
 	char name[20];
 	product milk;
-	printf("Введите данные о товарах в формате:\nНазвание, цена, количество, дата поступления (например 20.03.12), срок годности (в днях)\nВвод: ");
-	scanf("%s %f %d %d %d %d %d", &name, &milk.price, &milk.count, &milk.day, &milk.month, &milk.year, &milk.expiration);
+	printf("Введите данные о товарах в формате:\nНазвание, цена, количество,\nВвод: ");
+	scanf("%s %d %d", &name, &milk.price, &milk.count);
+    Date_Input(milk.day, milk.month, milk.year,date);
+    printf("Введите срок годности:");
+    scanf("%d",&milk.expiration);
 	strcpy(milk.name, name);
-    Date_Input(milk.day, milk.month, milk.year);
-	printf("%s %.2f %d %d %d %d %d", milk.name, milk.price, milk.count, milk.day, milk.month, milk.year, milk.expiration);
+    strcpy(milk.date, date);
+
+    //Date_Input(&milk.day, &milk.month, &milk.year);
+	printf("%s %d %d %s %d\n", milk.name, milk.price, milk.count, milk.date, milk.expiration);
 }
 
 int main()
 {
+    
 	setlocale(LC_ALL, "rus");
 	data_input();
 }
