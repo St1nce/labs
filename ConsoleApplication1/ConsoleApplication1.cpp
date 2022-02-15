@@ -7,13 +7,13 @@ struct product
 	char name[20];
 	char data[20];
 	int price, count, expiration;
-}milk;
+} milk;
 
 int main()
 {
 	setlocale(LC_ALL, "rus");
-	 char name[20] = "";
-	 milk.count = 10;
+	char name[20] = "";
+	milk.count = 10;
 	strcpy(milk.name, name);
 	printf("%d %s", milk.count, milk.name);
 }
