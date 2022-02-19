@@ -89,12 +89,12 @@ void data_input()
 	product milk;
 	printf("Введите данные о товарах в формате:\nНазвание, цена, количество,\nВвод: ");
 	scanf("%s %d %d", &name, &milk.price, &milk.count);
+    checking(milk.price);
     Date_Input(milk.day, milk.month, milk.year);
     printf("Введите срок годности:");
     scanf("%d",&milk.expiration);
 	strcpy(milk.name, name);
     /*strcpy(milk.date, date);*/
-    
     //Date_Input(&milk.day, &milk.month, &milk.year);
 	printf("%s %d %d %d.%d.%d %d\n", milk.name, milk.price, milk.count,milk.day,milk.month,milk.year , milk.expiration);
 }
