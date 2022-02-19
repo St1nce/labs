@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <Windows.h>
 #define N 20
+
 struct product  
 {
 	char name[20];
@@ -15,8 +16,7 @@ struct product
 	int count, expiration;
 };
 
-
-void Date_try(int& day, int& month, int& year)
+void check_date(int& day, int& month, int& year)
 {
     char temp[N]; // массив для ввода данных в едином (символьном) формате
     do
@@ -64,23 +64,6 @@ void Date_try(int& day, int& month, int& year)
         default:    return;
         }
     } while (1);
-   /* char date1[11] =
-    {
-        day / 10 + '0',
-        day % 10 + '0',
-        '.',
-        month / 10 + '0',
-        month % 10 + '0',
-        '.',
-        year / 1000 + '0',
-        (year / 100) % 10 + '0',
-        (year / 10) % 10 + '0',
-        year % 10 + '0',
-        '\0'
-    };
-    strcpy(date, date1);*/
-    //printf_s("%s\n", date);
-    
 }
 void check_input(int& price, int& count, int& expiration)
 {
@@ -116,35 +99,50 @@ void check_input(int& price, int& count, int& expiration)
     } while (1);   
     
 }
-void data_input()
+//void data_input(product p[],int i)
+//{
+//	char name[N];
+//    char dump;
+//	//product milk;
+//	printf("Введите название\nВвод: ");
+//	scanf("%s", &(p[i].name));
+//    scanf("%c", &dump);
+//    check_input(p[i].price, p[i].count, p[i].expiration);
+//    Date_try(p[i].day, p[i].month, p[i].year);
+//	/*strcpy(p[i].name, name);*/
+//	//printf("%s %d %d %d.%d.%d %d\n", milk.name, milk.price, milk.count,milk.day,milk.month,milk.year , milk.expiration);
+//}
+void product_inp(product p[])
 {
-    /*char date[11];*/
-	char name[N];
-    char dump;
-	product milk;
-	printf("Введите название\nВвод: ");
-	scanf("%s", &name);
-    scanf("%c", &dump);
-
-    
-    check_input(milk.price, milk.count, milk.expiration);
-    Date_try(milk.day, milk.month, milk.year);
-    /*printf("Введите срок годности:");
-    scanf("%d",&milk.expiration);*/
-	strcpy(milk.name, name);
-    /*strcpy(milk.date, date);*/
-    
-    //Date_Input(&milk.day, &milk.month, &milk.year);
-	printf("%s %d %d %d.%d.%d %d\n", milk.name, milk.price, milk.count,milk.day,milk.month,milk.year , milk.expiration);
+    FILE* ptrfile = fopen("text.txt", "r+");
+    int num = 0;
+    while (num < N)
+    {
+        char dump;
+        printf("Введите название продукта без пробела(Если хотите закончить список введите END в строке 'Ввод').\nВвод: ");
+        scanf("%s", &(p[num].name));
+        if (strcmp(p[num].name, "END") == 0)
+        {
+            break;
+        }
+        scanf("%c", &dump);
+        check_input(p[num].price, p[num].count, p[num].expiration);
+        check_date(p[num].day, p[num].month, p[num].year);
+        fwrite(p, 1, N, ptrfile);
+        num++;
+    }
+    fclose(ptrfile);
+    for (int i = 0; i < num; i++)
+    {
+        printf("\n%s %d %d %d.%d.%d %d\n", p[i].name, p[i].price, p[i].count, p[i].day, p[i].month, p[i].year, p[i].expiration);
+    }
 }
-
 int main()
 {
-    
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
-
 	setlocale(LC_ALL, "rus");
-	data_input();
-    
+    int cnt = 10;// Количество продуктов
+    struct product array[N];
+    product_inp(array);
 }
