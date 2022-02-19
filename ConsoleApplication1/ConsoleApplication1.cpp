@@ -112,9 +112,38 @@ void check_input(int& price, int& count, int& expiration)
 //	/*strcpy(p[i].name, name);*/
 //	//printf("%s %d %d %d.%d.%d %d\n", milk.name, milk.price, milk.count,milk.day,milk.month,milk.year , milk.expiration);
 //}
+void Save_in_File(product p[], int& n)
+{
+    int k = 0, ansr;
+    char fname[N];
+    printf("Хотите сохранить данные в файл?\n 1 - ДА, 0 - Нет\n");
+    scanf("%d", &ansr);
+    if (ansr == 1)
+    {
+        printf("\nВведите 'имя_файла.расширение': ");
+        scanf("%s", &fname);
+        FILE* f;
+        if ((f = fopen(fname, "wb")) == NULL) // Открываем файл для записи
+        {
+            puts("Ошибка сохранения!");
+            return;
+        }
+
+        while (k != n) fwrite(&p[k++], sizeof(p), n, f); // Записываем массив структур в файл
+        fclose(f);
+    }
+    else
+    {
+        return;
+    }
+}
 void product_inp(product p[])
 {
-    FILE* ptrfile = fopen("text.txt", "r+");
+    //FILE* ptrfile = fopen("c:\\users\\alexsandr\\source\\repos\\st1nce\\labs\\ConsoleApplication1\\text.txt", "rb+");
+    /*if (ptrfile == 0)
+    {
+        printf("Файл не найден");
+    }*/
     int num = 0;
     while (num < N)
     {
@@ -128,15 +157,18 @@ void product_inp(product p[])
         scanf("%c", &dump);
         check_input(p[num].price, p[num].count, p[num].expiration);
         check_date(p[num].day, p[num].month, p[num].year);
-        fwrite(p, 1, N, ptrfile);
         num++;
     }
-    fclose(ptrfile);
+    //fwrite(p, sizeof(p), num, ptrfile);
+    //fclose(ptrfile);
+
     for (int i = 0; i < num; i++)
     {
         printf("\n%s %d %d %d.%d.%d %d\n", p[i].name, p[i].price, p[i].count, p[i].day, p[i].month, p[i].year, p[i].expiration);
     }
+    Save_in_File(p,num);
 }
+
 int main()
 {
     SetConsoleCP(1251);
