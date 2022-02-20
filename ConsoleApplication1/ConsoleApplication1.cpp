@@ -6,16 +6,37 @@
 #include <Windows.h>
 #define N 20
 
-struct product  
+struct product
 {
-	char name[20];
-	int price;
+    char name[20];
+    int price;
     int day;
     int month;
     int year;
-	int count, expiration;
+    int count, expiration;
 };
 
+//bool operator == (product& right, product p)
+//{
+//    if ((strcmp(right, right.mark) == 0) && (strcmp(name, right.name) == 0) && (strcmp(number, right.number) == 0)) return true;
+//    return false;
+//}
+//bool operator > (product& right)
+//{
+//    if (strcmp(name, right.name) > 0) return true;
+//    return false;
+//}
+//product& operator = (product& с)
+//{
+//    strcpy(name, с.name);
+//    strcpy(mark, с.mark);
+//    strcpy(number, с.number);
+//    cost = с.cost;
+//    year = с.year;
+//    day = с.day;
+//    my_month = с.my_month;
+//    return *this;
+//}
 void check_date(int& day, int& month, int& year)
 {
     char temp[N]; // массив для ввода данных в едином (символьном) формате
@@ -68,7 +89,7 @@ void check_date(int& day, int& month, int& year)
 void check_input(int& price, int& count, int& expiration)
 {
 
-    
+
     char temp[N]; // массив для ввода данных в едином (символьном) формате
     do
     {
@@ -96,22 +117,9 @@ void check_input(int& price, int& count, int& expiration)
             printf("\nОшибка при вводе срока годности! Повторите ввод: ");
         } while (1);
         return;
-    } while (1);   
-    
+    } while (1);
+
 }
-//void data_input(product p[],int i)
-//{
-//	char name[N];
-//    char dump;
-//	//product milk;
-//	printf("Введите название\nВвод: ");
-//	scanf("%s", &(p[i].name));
-//    scanf("%c", &dump);
-//    check_input(p[i].price, p[i].count, p[i].expiration);
-//    Date_try(p[i].day, p[i].month, p[i].year);
-//	/*strcpy(p[i].name, name);*/
-//	//printf("%s %d %d %d.%d.%d %d\n", milk.name, milk.price, milk.count,milk.day,milk.month,milk.year , milk.expiration);
-//}
 void Save_in_File(product p[], int& n)
 {
     int k = 0, ansr;
@@ -129,7 +137,7 @@ void Save_in_File(product p[], int& n)
             return;
         }
 
-        while (k != n) fwrite(&p[k++], sizeof(p), n, f); // Записываем массив структур в файл
+        fwrite(p, sizeof(product), n, f); // Записываем массив структур в файл
         fclose(f);
     }
     else
@@ -137,13 +145,30 @@ void Save_in_File(product p[], int& n)
         return;
     }
 }
+void Load_from_File(product p[], int& n)
+{
+    int i = 0;
+    char fname[N];
+    FILE* f;
+
+    printf("\nВведите имя файла: ");
+    gets_s(fname);
+    if ((f = fopen(fname, "rb")) == NULL) puts("Ошибка загрузки"); // Открываем файл для чтения
+    else
+    {
+        fseek(f, 0L, 2); // Позиционируем указатель на конец файла
+        n = ftell(f) / sizeof(product); // Определяем количество записей в файле
+        rewind(f); // Позиционируем указатель на начало файла
+        fread(p, sizeof(product), n, f); // Копируем записи из файла
+        fclose(f); // Закрываем файл
+    }
+    for (int i = 0; i < n; i++)
+    {
+        printf("\n%s %d %d %d.%d.%d %d\n", p[i].name, p[i].price, p[i].count, p[i].day, p[i].month, p[i].year, p[i].expiration);
+    }
+}
 void product_inp(product p[])
 {
-    //FILE* ptrfile = fopen("c:\\users\\alexsandr\\source\\repos\\st1nce\\labs\\ConsoleApplication1\\text.txt", "rb+");
-    /*if (ptrfile == 0)
-    {
-        printf("Файл не найден");
-    }*/
     int num = 0;
     while (num < N)
     {
@@ -159,22 +184,62 @@ void product_inp(product p[])
         check_date(p[num].day, p[num].month, p[num].year);
         num++;
     }
-    //fwrite(p, sizeof(p), num, ptrfile);
-    //fclose(ptrfile);
 
     for (int i = 0; i < num; i++)
     {
         printf("\n%s %d %d %d.%d.%d %d\n", p[i].name, p[i].price, p[i].count, p[i].day, p[i].month, p[i].year, p[i].expiration);
     }
-    Save_in_File(p,num);
+    Save_in_File(p, num);
 }
+//void Sort_base(product* p, int& n)
+//{
+//    int i, j, min;
+//    product tmp;
+//
+//    for (i = 0; i < n - 1; i++)
+//    {
+//        min = i;
+//        for (j = i + 1; j < n; j++)
+//            if (p[min] > p[j]) min = j;
+//        tmp = p[i];
+//        p[i] = p[min];
+//        p[min] = tmp;
+//    }
+//}
+//void Bin_search(product* p[], int& n)
+//{
+//    int i, l = 0, r = n - 1, f = 0;
+//    char name[L];
+//
+//    printf("Название товара?: ");
+//    gets_s(name);
+//
+//    while ((l <= r) && (f == 0))
+//    {
+//        i = (l + r) / 2;
+//        if (strcmp(p[i].name, name) == 0)
+//        {
+//            f = 1;
+//            p[i].Output(); // вывод информации об автомобиле
+//            break;
+//        }
+//
+//        if (strcmp(p[i].name, name) < 0) l = i + 1;
+//        if (strcmp(p[i].name, name) > 0) r = i - 1;
+//    }
+//
+//    if (f == 0) puts("Нет данных!");
+//    _getch();
+//}
 
 int main()
 {
+    int n = 0;
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
-	setlocale(LC_ALL, "rus");
+    setlocale(LC_ALL, "rus");
     int cnt = 10;// Количество продуктов
     struct product array[N];
-    product_inp(array);
+    //product_inp(array);
+    Load_from_File(array, n);
 }
