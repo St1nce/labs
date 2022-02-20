@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include <Windows.h>
 #define N 20
-
 struct product
 {
     char name[20];
@@ -203,6 +202,7 @@ void Delete_name(product p[], int& n)
 {
     int i, j, l = 0, r = n - 1, f = 0;
     char name[N];
+    Output_struct(p, n);
     printf(" Введите название товара: ");
     scanf("%s", &name);
     while ((l <= r) && (f == 0))
@@ -230,10 +230,10 @@ void Delete_name(product p[], int& n)
         }
         if (strcmp(p[i].name, name) < 0) l = i + 1;
         if (strcmp(p[i].name, name) > 0) r = i - 1;
+        if (strcmp(p[i].name, name) == 0) r = i;
     }
     if (f == 0) puts("Нет данных!");
 }
-
 void product_inp(product p[])
 {
     int num = 0;
@@ -278,7 +278,6 @@ void product_inp(product p[])
         printf("Такой команды такой нету");
     }
 }
-
 //void Bin_search(product* p[], int& n)
 //{
 //    int i, l = 0, r = n - 1, f = 0;
@@ -304,7 +303,6 @@ void product_inp(product p[])
 //    if (f == 0) puts("Нет данных!");
 //    _getch();
 //}
-
 int main()
 {
     int n = 0;
