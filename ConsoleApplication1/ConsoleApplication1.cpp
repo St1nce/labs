@@ -14,29 +14,26 @@ struct product
     int month;
     int year;
     int count, expiration;
+    bool operator > (product& right)
+    {
+        if (strcmp(name, right.name) > 0) return true;
+        return false;
+    }
+    product& operator = (product& c)
+    {
+        strcpy(name, c.name);
+        price = c.price;
+        day = c.day;
+        month = c.month;
+        year = c.year;
+        count = c.count;
+        expiration = c.expiration;
+        return *this;
+    }
+    
+        
 };
 
-//bool operator == (product& right, product p)
-//{
-//    if ((strcmp(right, right.mark) == 0) && (strcmp(name, right.name) == 0) && (strcmp(number, right.number) == 0)) return true;
-//    return false;
-//}
-//bool operator > (product& right)
-//{
-//    if (strcmp(name, right.name) > 0) return true;
-//    return false;
-//}
-//product& operator = (product& с)
-//{
-//    strcpy(name, с.name);
-//    strcpy(mark, с.mark);
-//    strcpy(number, с.number);
-//    cost = с.cost;
-//    year = с.year;
-//    day = с.day;
-//    my_month = с.my_month;
-//    return *this;
-//}
 void check_date(int& day, int& month, int& year)
 {
     char temp[N]; // массив для ввода данных в едином (символьном) формате
@@ -167,6 +164,25 @@ void Load_from_File(product p[], int& n)
         printf("\n%s %d %d %d.%d.%d %d\n", p[i].name, p[i].price, p[i].count, p[i].day, p[i].month, p[i].year, p[i].expiration);
     }
 }
+void Sort_Name(product p[], int& n)
+{
+    int i, j, min;
+    product tmp;
+
+    for (i = 0; i < n - 1; i++)
+    {
+        min = i;
+        for (j = i + 1; j < n; j++)
+            if (p[min] > p[j]) min = j; //см. перегрузку операции отношения > в файле "avto.h"
+        tmp = p[i];
+        p[i] = p[min];
+        p[min] = tmp;
+    }
+}
+void Sort_Date(int day, int month, int year)
+{
+
+}
 void product_inp(product p[])
 {
     int num = 0;
@@ -189,23 +205,15 @@ void product_inp(product p[])
     {
         printf("\n%s %d %d %d.%d.%d %d\n", p[i].name, p[i].price, p[i].count, p[i].day, p[i].month, p[i].year, p[i].expiration);
     }
-    Save_in_File(p, num);
+    //Save_in_File(p, num);
+    Sort_base(p,num);
+    for (int i = 0; i < num; i++)
+    {
+        printf("\n%s %d %d %d.%d.%d %d\n", p[i].name, p[i].price, p[i].count, p[i].day, p[i].month, p[i].year, p[i].expiration);
+    }
+
 }
-//void Sort_base(product* p, int& n)
-//{
-//    int i, j, min;
-//    product tmp;
-//
-//    for (i = 0; i < n - 1; i++)
-//    {
-//        min = i;
-//        for (j = i + 1; j < n; j++)
-//            if (p[min] > p[j]) min = j;
-//        tmp = p[i];
-//        p[i] = p[min];
-//        p[min] = tmp;
-//    }
-//}
+
 //void Bin_search(product* p[], int& n)
 //{
 //    int i, l = 0, r = n - 1, f = 0;
@@ -238,8 +246,7 @@ int main()
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
     setlocale(LC_ALL, "rus");
-    int cnt = 10;// Количество продуктов
     struct product array[N];
-    //product_inp(array);
-    Load_from_File(array, n);
+    product_inp(array);
+    //Load_from_File(array, n);
 }
