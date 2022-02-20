@@ -206,7 +206,8 @@ void del(product p[],int& n)
         printf("%d %s\n", i+1, p[i].name);
     }
     printf(" Введите номер товара: ");
-    for (int j=0; j < n; j++) 
+    int j = 0;
+    for (; j < n; j++) 
     {
         int numb;
         scanf("%d", &numb);
@@ -215,9 +216,9 @@ void del(product p[],int& n)
         p[j-1].Output();// вывод информации о товаре
         break;
     }
-    int numb;
-    printf("Хотите удалить? Введите номер товара еще раз для подтверждения:");
-    scanf("%d", &numb);
+    int numb=j;
+    printf("Хотите удалить? Введите номер товара еще раз для подтверждения:\n");
+    //scanf("%d", &numb);
     for (int j = numb; j < n - 1; j++) p[j-1] = p[j + 1];
       n--;
       Output_struct(p, n);
