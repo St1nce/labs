@@ -199,41 +199,32 @@ void Sort_Date(product p[], int& n)
         }
     }
 }
-void Delete_name(product p[], int& n)
+void del(product p[],int& n)
 {
-    int i, j, l = 0, r = n - 1, f = 0;
-    char name[N];
-    printf(" Введите название товара: ");
-    scanf("%s", &name);
-    while ((l <= r) && (f == 0))
+    for(int i=0;i<n;i++)
     {
-        i = (l + r) / 2;
-        if (strcmp(p[i].name, name) == 0)
-        {
-            f = 1;
-            p[i].Output(); // вывод информации о товаре
-            printf("\n Удалить запись? Да(1) или нет(0)?\n");
-            scanf("%d", &l);
-            if (l == 1)
-            {
-                for (j = i; j < n - 1; j++) p[j] = p[j + 1];
-                n--;
-                Output_struct(p, n);
-            }
-            
-            else
-            {
-                printf("Не удалили! \n");
-                Output_struct(p,n);
-                break;
-            }
-        }
-        if (strcmp(p[i].name, name) < 0) l = i + 1;
-        if (strcmp(p[i].name, name) > 0) r = i - 1;
+        printf("%d %s\n", i+1, p[i].name);
     }
-    if (f == 0) puts("Нет данных!");
-}
+    printf(" Введите номер товара: ");
+    for (int j=0; j < n; j++) 
+    {
+        int numb;
+        scanf("%d", &numb);
+        j = numb;
+        
+        p[j-1].Output();// вывод информации о товаре
+        break;
+    }
+    int numb;
+    printf("Хотите удалить? Введите номер товара еще раз для подтверждения:");
+    scanf("%d", &numb);
+    for (int j = numb; j < n - 1; j++) p[j-1] = p[j + 1];
+      n--;
+      Output_struct(p, n);
+ 
 
+    
+}
 void product_inp(product p[])
 {
     int num = 0;
@@ -271,7 +262,8 @@ void product_inp(product p[])
     }
     else if (answer == 3)
     {
-        Delete_name(p,num);
+        //Delete_name(p,num);
+        del(p, num);
     }
     else
     {
