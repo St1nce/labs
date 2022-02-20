@@ -16,9 +16,9 @@ struct product
     int count, expiration;
 };
 
-//bool operator == (product& right, product p)
+//bool operator == (product p[],int& n)
 //{
-//    if ((strcmp(right, right.mark) == 0) && (strcmp(name, right.name) == 0) && (strcmp(number, right.number) == 0)) return true;
+//    if ((strcmp(p[], p[].name) == 0) return true;
 //    return false;
 //}
 //bool operator > (product& right)
@@ -167,6 +167,25 @@ void Load_from_File(product p[], int& n)
         printf("\n%s %d %d %d.%d.%d %d\n", p[i].name, p[i].price, p[i].count, p[i].day, p[i].month, p[i].year, p[i].expiration);
     }
 }
+void Sort_base(product p[], int& n)
+{
+    int i, j, min;
+    product tmp;
+
+    for (i = 0; i < n - 1; i++)
+    {
+        min = i;
+        for (j = i + 1; j < n; j++)
+            if (p[min].name > p[j].name) min = j;
+        tmp = p[i];
+        p[i] = p[min];
+        p[min] = tmp;
+    }
+    for (int i = 0; i < n; i++)
+    {
+        printf("\n%s %d %d %d.%d.%d %d\n", p[i].name, p[i].price, p[i].count, p[i].day, p[i].month, p[i].year, p[i].expiration);
+    }
+}
 void product_inp(product p[])
 {
     int num = 0;
@@ -189,9 +208,10 @@ void product_inp(product p[])
     {
         printf("\n%s %d %d %d.%d.%d %d\n", p[i].name, p[i].price, p[i].count, p[i].day, p[i].month, p[i].year, p[i].expiration);
     }
-    Save_in_File(p, num);
+    /*Save_in_File(p, num);*/
+    Sort_base(p, num);
 }
-//void Sort_base(product* p, int& n)
+//void Sort_base(product p[], int& n)
 //{
 //    int i, j, min;
 //    product tmp;
@@ -200,13 +220,17 @@ void product_inp(product p[])
 //    {
 //        min = i;
 //        for (j = i + 1; j < n; j++)
-//            if (p[min] > p[j]) min = j;
+//            if (p[min].name > p[j].name) min = j;
 //        tmp = p[i];
 //        p[i] = p[min];
 //        p[min] = tmp;
 //    }
+//    for (int i = 0; i < n; i++)
+//    {
+//        printf("\n%s %d %d %d.%d.%d %d\n", p[i].name, p[i].price, p[i].count, p[i].day, p[i].month, p[i].year, p[i].expiration);
+//    }
 //}
-//void Bin_search(product* p[], int& n)
+//void Bin_search(product p[], int& n)
 //{
 //    int i, l = 0, r = n - 1, f = 0;
 //    char name[L];
@@ -240,6 +264,6 @@ int main()
     setlocale(LC_ALL, "rus");
     int cnt = 10;// Количество продуктов
     struct product array[N];
-    //product_inp(array);
-    Load_from_File(array, n);
+    product_inp(array);
+    //Load_from_File(array, n);
 }
