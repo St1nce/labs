@@ -14,6 +14,10 @@ struct product
     int month;
     int year;
     int count, expiration;
+    void Output()
+    {
+        printf("%s %d %d %d.%d.%d %d\n",name, price, count, day, month, year, expiration); // Вывод данных на экран 
+    }
     bool operator > (product& right)
     {
         if (strcmp(name, right.name) > 0) return true;
@@ -30,10 +34,14 @@ struct product
         expiration = c.expiration;
         return *this;
     }
-    
-        
 };
-
+void Output_struct(product p[], int& n)
+{
+    for (int i = 0; i < n; i++)
+    {
+        printf("%s %d %d %d.%d.%d %d\n", p[i].name, p[i].price, p[i].count, p[i].day, p[i].month, p[i].year, p[i].expiration);
+    }
+}
 void check_date(int& day, int& month, int& year)
 {
     char temp[N]; // массив для ввода данных в едином (символьном) формате
@@ -159,10 +167,7 @@ void Load_from_File(product p[], int& n)
         fread(p, sizeof(product), n, f); // Копируем записи из файла
         fclose(f); // Закрываем файл
     }
-    for (int i = 0; i < n; i++)
-    {
-        printf("\n%s %d %d %d.%d.%d %d\n", p[i].name, p[i].price, p[i].count, p[i].day, p[i].month, p[i].year, p[i].expiration);
-    }
+    Output_struct(p, n);
 }
 void Sort_Name(product p[], int& n)
 {
@@ -179,10 +184,56 @@ void Sort_Name(product p[], int& n)
         p[min] = tmp;
     }
 }
-void Sort_Date(int day, int month, int year)
+void Sort_Date(product p[], int& n)
 {
-
+    for (int i = 0; i < n - 1; i++)
+    {
+        for (int j = i + 1; j < n; j++)
+        {
+            if (p[i].day + p[i].month + p[i].year > p[j].day + p[j].month + p[j].year)
+            {
+                product temp = p[j];
+                p[j] = p[i];
+                p[i] = temp;
+            }
+        }
+    }
 }
+void Delete_name(product p[], int& n)
+{
+    int i, j, l = 0, r = n - 1, f = 0;
+    char name[N];
+    printf(" Введите название товара: ");
+    scanf("%s", &name);
+    while ((l <= r) && (f == 0))
+    {
+        i = (l + r) / 2;
+        if (strcmp(p[i].name, name) == 0)
+        {
+            f = 1;
+            p[i].Output(); // вывод информации о товаре
+            printf("\n Удалить запись? Да(1) или нет(0)?\n");
+            scanf("%d", &l);
+            if (l == 1)
+            {
+                for (j = i; j < n - 1; j++) p[j] = p[j + 1];
+                n--;
+                Output_struct(p, n);
+            }
+            
+            else
+            {
+                printf("Не удалили! \n");
+                Output_struct(p,n);
+                break;
+            }
+        }
+        if (strcmp(p[i].name, name) < 0) l = i + 1;
+        if (strcmp(p[i].name, name) > 0) r = i - 1;
+    }
+    if (f == 0) puts("Нет данных!");
+}
+
 void product_inp(product p[])
 {
     int num = 0;
@@ -201,17 +252,31 @@ void product_inp(product p[])
         num++;
     }
 
-    for (int i = 0; i < num; i++)
-    {
-        printf("\n%s %d %d %d.%d.%d %d\n", p[i].name, p[i].price, p[i].count, p[i].day, p[i].month, p[i].year, p[i].expiration);
-    }
-    //Save_in_File(p, num);
-    Sort_base(p,num);
-    for (int i = 0; i < num; i++)
-    {
-        printf("\n%s %d %d %d.%d.%d %d\n", p[i].name, p[i].price, p[i].count, p[i].day, p[i].month, p[i].year, p[i].expiration);
-    }
+    Output_struct(p, num);
 
+    printf("Доступные действия\n1 - Сортировать по названия\n2 - Сортировать по дате\n3 - Удалить данные\n");
+    int answer;
+    scanf_s("%d",&answer);
+    if (answer == 1)
+    {
+         Sort_Name(p, num);
+         printf("Сортировка по названию:\n");
+         Output_struct(p, num);
+    }
+    else if (answer == 2)
+    {
+         Sort_Date(p, num);
+         printf("Сортировка по дате:\n");
+         Output_struct(p, num);
+    }
+    else if (answer == 3)
+    {
+        Delete_name(p,num);
+    }
+    else
+    {
+        printf("Такой команды такой нету");
+    }
 }
 
 //void Bin_search(product* p[], int& n)
