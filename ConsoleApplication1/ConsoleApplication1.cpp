@@ -305,5 +305,5 @@ int main()
     setlocale(LC_ALL, "rus");
     struct product array[N];
     product_inp(array);
-    //Load_from_File(array, n);
+    //.Load_from_File(array, n);
 }
