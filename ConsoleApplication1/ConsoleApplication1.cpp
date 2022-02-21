@@ -4,6 +4,7 @@
 #include <string.h> 
 #include <stdlib.h>
 #include <Windows.h>
+#include <conio.h>
 #define N 20
 
 struct product
@@ -226,6 +227,30 @@ void del(product p[],int& n)
 
     
 }
+void Bin_search(product* p[], int& n)
+{
+    int i, l = 0, r = n - 1, f = 0;
+    char name[N];
+
+    printf("Название товара?: ");
+    scanf("%s",name);
+    while ((l <= r) && (f == 0))
+    {
+        i = (l + r) / 2;
+        if (strcmp(p[i].name, name) == 0)
+        {
+            f = 1;
+            p[i].Output(); // вывод информации об автомобиле
+            break;
+        }
+
+        if (strcmp(p[i].name, name) < 0) l = i + 1;
+        if (strcmp(p[i].name, name) > 0) r = i - 1;
+    }
+
+    if (f == 0) puts("Нет данных!");
+    _getch();
+}
 void product_inp(product p[])
 {
     int num = 0;
@@ -263,7 +288,6 @@ void product_inp(product p[])
     }
     else if (answer == 3)
     {
-        //Delete_name(p,num);
         del(p, num);
     }
     else
@@ -271,33 +295,6 @@ void product_inp(product p[])
         printf("Такой команды такой нету");
     }
 }
-
-//void Bin_search(product* p[], int& n)
-//{
-//    int i, l = 0, r = n - 1, f = 0;
-//    char name[L];
-//
-//    printf("Название товара?: ");
-//    gets_s(name);
-//
-//    while ((l <= r) && (f == 0))
-//    {
-//        i = (l + r) / 2;
-//        if (strcmp(p[i].name, name) == 0)
-//        {
-//            f = 1;
-//            p[i].Output(); // вывод информации об автомобиле
-//            break;
-//        }
-//
-//        if (strcmp(p[i].name, name) < 0) l = i + 1;
-//        if (strcmp(p[i].name, name) > 0) r = i - 1;
-//    }
-//
-//    if (f == 0) puts("Нет данных!");
-//    _getch();
-//}
-
 int main()
 {
     int n = 0;
@@ -305,6 +302,4 @@ int main()
     SetConsoleOutputCP(1251);
     setlocale(LC_ALL, "rus");
     struct product array[N];
-    product_inp(array);
-    //.Load_from_File(array, n);
 }
