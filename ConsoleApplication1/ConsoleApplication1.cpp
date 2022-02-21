@@ -70,9 +70,9 @@ void check_date(int& day, int& month, int& year)// проверка ввода �
 
         do
         {
-            printf("Введите год (с 1940 до 2020): ");
+            printf("Введите год (с 2000 до 2022): ");
             year = atoi(gets_s(temp));
-            if ((year >= 1940) && (year < 2022)) break;
+            if ((year >= 2000) && (year <= 2022)) break;
             printf("\nОшибка при вводе года!\n");
         } while (1);
 
@@ -322,7 +322,6 @@ void product_inp(product p[])// функция ввода данных о тов
     {
         Sort_Name(p, num);
         printf("Сортировка по названию:\n");
-        Output_struct(p, num);
         Bin_search(p, num);
         Save_in_File(p, num);
     }
