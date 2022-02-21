@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include <Windows.h>
 #include <conio.h>
-
 #define N 20
 
 struct product
@@ -41,14 +40,14 @@ void Sort_Name(product p[], int& n);
 void Sort_Date(product p[], int& n);
 void del(product p[], int& n);
 void Bin_search(product p[], int& n);
-void Output_struct(product p[], int& n)
+void Output_struct(product p[], int& n)//вывод массива структуры
 {
     for (int i = 0; i < n; i++)
     {
         printf("%s %d %d %d.%d.%d %d\n", p[i].name, p[i].price, p[i].count, p[i].day, p[i].month, p[i].year, p[i].expiration);
     }
 }
-void check_date(int& day, int& month, int& year)
+void check_date(int& day, int& month, int& year)// проверка ввода даты
 {
     char temp[N]; // массив для ввода данных в едином (символьном) формате
     do
@@ -97,7 +96,7 @@ void check_date(int& day, int& month, int& year)
         }
     } while (1);
 }
-void check_input(int& price, int& count, int& expiration)
+void check_input(int& price, int& count, int& expiration)//Проверка ввода данных
 {
 
 
@@ -131,7 +130,7 @@ void check_input(int& price, int& count, int& expiration)
     } while (1);
 
 }
-void Save_in_File(product p[], int& n)
+void Save_in_File(product p[], int& n)//сохранение в файл
 {
     int k = 0, ansr;
     char fname[N];
@@ -157,7 +156,7 @@ void Save_in_File(product p[], int& n)
         return;
     }
 }
-void Load_from_File(product p[], int& n)
+void Load_from_File(product p[], int& n)//загрузка из файла в массив стуктур
 {
     int i = 0;
     char fname[N];
@@ -203,7 +202,7 @@ void Load_from_File(product p[], int& n)
     }
 
 }
-void Sort_Name(product p[], int& n)
+void Sort_Name(product p[], int& n)// сортирока по названию товара
 {
     int i, j, min;
     product tmp;
@@ -219,7 +218,7 @@ void Sort_Name(product p[], int& n)
     }
     Output_struct(p, n);
 }
-void Sort_Date(product p[], int& n)
+void Sort_Date(product p[], int& n)// сортировка по дате получения
 {
     for (int i = 0; i < n - 1; i++)
     {
@@ -235,7 +234,7 @@ void Sort_Date(product p[], int& n)
     }
     Output_struct(p, n);
 }
-void del(product p[],int& n)
+void del(product p[],int& n)// удаление данных
 {
     int ans;
     for(int i=0;i<n;i++)
@@ -268,7 +267,7 @@ void del(product p[],int& n)
         Output_struct(p, n);
     } 
 }
-void Bin_search(product p[], int& n)
+void Bin_search(product p[], int& n)// бинарный поиск
 {
     int i, l = 0, r = n - 1, f = 0, otv;
     char name[N];
@@ -296,8 +295,7 @@ void Bin_search(product p[], int& n)
         
     }
 }
-
-void product_inp(product p[])
+void product_inp(product p[])// функция ввода данных о товаре.
 {
     int num = 0;
     while (num < N)
@@ -345,7 +343,7 @@ void product_inp(product p[])
         Save_in_File(p, num);
     }
 }
-void menu(product array[],int& n)
+void menu(product array[],int& n)// меню
 {
     int start;
     printf("Доступные действия:\nВвести данные о товарах (1)\nЗагрузить данные из файла (2)\nВвод: ");
