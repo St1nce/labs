@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <Windows.h>
 #include <conio.h>
+
 #define N 20
 
 struct product
@@ -36,6 +37,10 @@ struct product
         return *this;
     }
 };
+void Sort_Name(product p[], int& n);
+void Sort_Date(product p[], int& n);
+void del(product p[], int& n);
+void Bin_search(product p[], int& n);
 void Output_struct(product p[], int& n)
 {
     for (int i = 0; i < n; i++)
@@ -130,7 +135,7 @@ void Save_in_File(product p[], int& n)
 {
     int k = 0, ansr;
     char fname[N];
-    printf("Хотите сохранить данные в файл?\n 1 - ДА, 0 - Нет\n");
+    printf("Хотите сохранить данные в файл?\n 1 - ДА, 2 - Выход из программы\n");
     scanf("%d", &ansr);
     if (ansr == 1)
     {
@@ -148,6 +153,7 @@ void Save_in_File(product p[], int& n)
     }
     else
     {
+        printf("Закрыто");
         return;
     }
 }
@@ -158,8 +164,11 @@ void Load_from_File(product p[], int& n)
     FILE* f;
 
     printf("\nВведите имя файла: ");
-    gets_s(fname);
-    if ((f = fopen(fname, "rb")) == NULL) puts("Ошибка загрузки"); // Открываем файл для чтения
+    scanf("%s",&fname);
+    if ((f = fopen(fname, "rb")) == NULL) // Открываем файл для чтения
+    {
+        puts("Ошибка загрузки"); return;
+    } 
     else
     {
         fseek(f, 0L, 2); // Позиционируем указатель на конец файла
@@ -169,6 +178,30 @@ void Load_from_File(product p[], int& n)
         fclose(f); // Закрываем файл
     }
     Output_struct(p, n);
+    int answer;
+    printf("1 - Сортировать по названию\n2 - Сортировать по дате получению\n3 - Удаления данных\n Ввод:");
+    scanf("%d", &answer);
+    if (answer == 1)
+    {
+        Sort_Name(p, n);
+        Bin_search(p, n);
+        Save_in_File(p, n);
+        
+
+    }
+    else if (answer == 2)
+    {
+        Sort_Date(p, n);
+        Bin_search(p, n);
+        Save_in_File(p, n);
+    }
+    else
+    {
+        del(p, n);
+        printf("Товар удален\n");
+        Save_in_File(p, n);
+    }
+
 }
 void Sort_Name(product p[], int& n)
 {
@@ -184,6 +217,7 @@ void Sort_Name(product p[], int& n)
         p[i] = p[min];
         p[min] = tmp;
     }
+    Output_struct(p, n);
 }
 void Sort_Date(product p[], int& n)
 {
@@ -199,14 +233,16 @@ void Sort_Date(product p[], int& n)
             }
         }
     }
+    Output_struct(p, n);
 }
 void del(product p[],int& n)
 {
+    int ans;
     for(int i=0;i<n;i++)
     {
-        printf("%d %s\n", i+1, p[i].name);
+        printf("%d - %s\n", i+1, p[i].name);
     }
-    printf(" Введите номер товара: ");
+    printf(" Теперь каждый товар пронумерован,введите номер товара: ");
     int j = 0;
     for (; j < n; j++) 
     {
@@ -218,39 +254,49 @@ void del(product p[],int& n)
         break;
     }
     int numb=j;
-    printf("Хотите удалить? Введите номер товара еще раз для подтверждения:\n");
-    //scanf("%d", &numb);
-    for (int j = numb; j < n - 1; j++) p[j-1] = p[j + 1];
-      n--;
-      Output_struct(p, n);
- 
-
-    
-}
-void Bin_search(product* p[], int& n)
-{
-    int i, l = 0, r = n - 1, f = 0;
-    char name[N];
-
-    printf("Название товара?: ");
-    scanf("%s",name);
-    while ((l <= r) && (f == 0))
+    printf("Хотите удалить? Да(1)/ Нет(2)\n");
+    scanf("%d", &ans);
+    if (ans == 1)
     {
-        i = (l + r) / 2;
-        if (strcmp(p[i].name, name) == 0)
-        {
-            f = 1;
-            p[i].Output(); // вывод информации об автомобиле
-            break;
-        }
-
-        if (strcmp(p[i].name, name) < 0) l = i + 1;
-        if (strcmp(p[i].name, name) > 0) r = i - 1;
+        for (int j = numb; j < n - 1; j++) p[j - 1] = p[j + 1];
+        n--;
+        Output_struct(p, n);
     }
-
-    if (f == 0) puts("Нет данных!");
-    _getch();
+    else
+    {
+        printf("Не удалили\n");
+        Output_struct(p, n);
+    } 
 }
+void Bin_search(product p[], int& n)
+{
+    int i, l = 0, r = n - 1, f = 0, otv;
+    char name[N];
+    printf("Хотите ли найти товар? 1 - Да, 2 - Нет\nВвод:");
+    scanf("%d", &otv);
+    if (otv == 1)
+    {
+        printf("Название товара?: ");
+        scanf("%s", &name);
+        while ((l <= r) && (f == 0))
+        {
+            i = (l + r) / 2;
+            if (strcmp(p[i].name, name) == 0)
+            {
+                f = 1;
+                p[i].Output(); // вывод информации об автомобиле
+                break;
+            }
+
+            if (strcmp(p[i].name, name) < 0) l = i + 1;
+            if (strcmp(p[i].name, name) > 0) r = i - 1;
+        }
+            if (f == 0) puts("Нет данных!");
+            _getch();
+        
+    }
+}
+
 void product_inp(product p[])
 {
     int num = 0;
@@ -271,29 +317,45 @@ void product_inp(product p[])
 
     Output_struct(p, num);
 
-    printf("Доступные действия\n1 - Сортировать по названия\n2 - Сортировать по дате\n3 - Удалить данные\n");
-    int answer;
-    scanf_s("%d",&answer);
+    printf("Доступные действия\n1 - Сортировать по названия\n2 - Сортировать по дате\n3 - Удалить данные\n4 - сохранить данные\n");
+    int answer, ans1, ans2;
+    scanf_s("%d", &answer);
     if (answer == 1)
     {
-         Sort_Name(p, num);
-         printf("Сортировка по названию:\n");
-         Output_struct(p, num);
+        Sort_Name(p, num);
+        printf("Сортировка по названию:\n");
+        Output_struct(p, num);
+        Bin_search(p, num);
+        Save_in_File(p, num);
     }
     else if (answer == 2)
     {
          Sort_Date(p, num);
          printf("Сортировка по дате:\n");
          Output_struct(p, num);
+         Bin_search(p, num);
+         Save_in_File(p, num);
     }
     else if (answer == 3)
     {
         del(p, num);
     }
-    else
+    else if (answer == 4)
     {
-        printf("Такой команды такой нету");
+        Save_in_File(p, num);
     }
+}
+void menu(product array[],int& n)
+{
+    int start;
+    printf("Доступные действия:\nВвести данные о товарах (1)\nЗагрузить данные из файла (2)\nВвод: ");
+    scanf("%d", &start);
+    if (start == 1)
+        product_inp(array);
+    else if (start == 2)
+        Load_from_File(array, n);
+    else
+        printf("Такого действия нету");
 }
 int main()
 {
@@ -302,4 +364,6 @@ int main()
     SetConsoleOutputCP(1251);
     setlocale(LC_ALL, "rus");
     struct product array[N];
+    menu(array,n);
+    
 }
