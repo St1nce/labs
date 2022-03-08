@@ -218,18 +218,53 @@ void Sort_Name(product p[], int& n)// сортирока по названию �
     }
     Output_struct(p, n);
 }
+//void Sort_Date(product p[], int& n)// сортировка по дате получения
+//{
+//    for (int i = 0; i < n - 1; i++)
+//    {
+//        for (int j = i + 1; j < n; j++)
+//        {
+//            if (p[i].day + p[i].month + p[i].year > p[j].day + p[j].month + p[j].year)
+//            {
+//                product temp = p[j];
+//                p[j] = p[i];
+//                p[i] = temp;
+//            }
+//        }
+//    }
+//    Output_struct(p, n);
+//}
 void Sort_Date(product p[], int& n)// сортировка по дате получения
 {
     for (int i = 0; i < n - 1; i++)
     {
         for (int j = i + 1; j < n; j++)
         {
-            if (p[i].day + p[i].month + p[i].year > p[j].day + p[j].month + p[j].year)
+            if (p[i].year > p[j].year)
             {
                 product temp = p[j];
                 p[j] = p[i];
-                p[i] = temp;
+                p[i] = temp; 
             }
+            if (p[i].year==p[j].year)
+            {
+                if (p[i].month > p[j].month)
+                {
+                    product temp = p[j];
+                    p[j] = p[i];
+                    p[i] = temp;
+                }
+            }
+            if (p[i].month == p[j].month)
+            {
+                if (p[i].day > p[j].day)
+                {
+                    product temp = p[j];
+                    p[j] = p[i];
+                    p[i] = temp;
+                }
+            }
+            
         }
     }
     Output_struct(p, n);
