@@ -7,24 +7,24 @@
 #include <conio.h>
 #define N 20
 
-struct product
+struct product //Структура данных "товары"
 {
-    char name[N];
+    char name[N]; 
     int price;
     int day;
     int month;
     int year;
     int count, expiration;
-    void Output()
+    void Output() // Вывод данных на экран 
     {
-        printf("%s %d %d %d.%d.%d %d\n",name, price, count, day, month, year, expiration); // Вывод данных на экран 
+        printf("%s %d %d %d.%d.%d %d\n",name, price, count, day, month, year, expiration);
     }
-    bool operator > (product& right)
+    bool operator > (product& right) // Перегрузка оператора
     {
         if (strcmp(name, right.name) > 0) return true;
         return false;
     }
-    product& operator = (product& c)
+    product& operator = (product& c) // Перегрузка оператора
     {
         strcpy(name, c.name);
         price = c.price;
@@ -36,17 +36,21 @@ struct product
         return *this;
     }
 };
-void Sort_Name(product p[], int& n);
+void Sort_Name(product p[], int& n); //Объявление прототипов функций
 void Sort_Date(product p[], int& n);
 void del(product p[], int& n);
 void Bin_search(product p[], int& n);
+void menu(product array[], int& n);
+void product_inp(product p[],int& num);
+void add_data(product p[], int& num);
+
 void Output_struct(product p[], int& n)//вывод массива структуры
 {
     for (int i = 0; i < n; i++)
     {
         printf("%s %d %d %d.%d.%d %d\n", p[i].name, p[i].price, p[i].count, p[i].day, p[i].month, p[i].year, p[i].expiration);
     }
-}
+} 
 void check_date(int& day, int& month, int& year)// проверка ввода даты
 {
     char temp[N]; // массив для ввода данных в едином (символьном) формате
@@ -70,9 +74,9 @@ void check_date(int& day, int& month, int& year)// проверка ввода �
 
         do
         {
-            printf("Введите год (с 2021 до 2022): ");
+            printf("Введите год (с 1980 до 2022): ");
             year = atoi(gets_s(temp));
-            if ((year >= 2021) && (year <= 2022)) break;
+            if ((year >= 1980) && (year <= 2022)) break;
             printf("\nОшибка при вводе года!\n");
         } while (1);
 
@@ -155,8 +159,9 @@ void Save_in_File(product p[], int& n)//сохранение в файл
         printf("Закрыто");
         return;
     }
+    return;
 }
-void Load_from_File(product p[], int& num)//загрузка из файла в массив стуктур
+void Load_from_File(product p[], int& n)//загрузка из файла в массив стуктур
 {
     int i = 0;
     char fname[N];
@@ -171,36 +176,34 @@ void Load_from_File(product p[], int& num)//загрузка из файла в 
     else
     {
         fseek(f, 0L, 2); // Позиционируем указатель на конец файла
-        num = ftell(f) / sizeof(product); // Определяем количество записей в файле
+        n = ftell(f) / sizeof(product); // Определяем количество записей в файле
         rewind(f); // Позиционируем указатель на начало файла
-        fread(p, sizeof(product), num, f); // Копируем записи из файла
+        fread(p, sizeof(product), n, f); // Копируем записи из файла
         fclose(f); // Закрываем файл
     }
-    Output_struct(p, num);
-    /*int answer;
-    printf("1 - Сортировать по названию\n2 - Сортировать по дате получения\n3 - Удаления данных\n Ввод:");
-    scanf("%d", &answer);
-    if (answer == 1)
+    Output_struct(p, n);
+    do // Меню для загруэенного файла
     {
-        Sort_Name(p, n);
-        Bin_search(p, n);
-        Save_in_File(p, n);
-        
-
-    }
-    else if (answer == 2)
-    {
-        Sort_Date(p, n);
-        Bin_search(p, n);
-        Save_in_File(p, n);
-    }
-    else
-    {
-        del(p, n);
-        printf("Товар удален\n");
-        Save_in_File(p, n);
-    }*/
-    
+        int start = 0;
+        printf("Доступные действия:\n 1 - Ввести данные о товарах,2 - Сохранить данные в файле,\n 3 - Сортировка по дате, 4 - Сортировка по названию, 5 - Бинарный поиск(только после сортировки),\n 6 - удаление данных, 7 - Завершение работы с данным файлом\nВВОД:");
+        scanf("%d", &start);
+        if (start == 1)
+            product_inp(p,n);
+        else if (start == 2)
+            Save_in_File(p, n);
+        else if (start == 3)
+            Sort_Date(p, n);
+        else if (start == 4)
+            Sort_Name(p, n);
+        else if (start == 5)
+            Bin_search(p, n);
+        else if (start == 6)
+            del(p, n);
+        else if (start == 7)
+            menu(p, n);
+        else
+            printf("Такого действия нету");
+    } while (true);
 }
 void Sort_Name(product p[], int& n)// сортирока по названию товара
 {
@@ -217,6 +220,7 @@ void Sort_Name(product p[], int& n)// сортирока по названию �
         p[min] = tmp;
     }
     Output_struct(p, n);
+    return;
 }
 void Sort_Date(product p[], int& n)// сортировка по дате получения
 {
@@ -252,6 +256,7 @@ void Sort_Date(product p[], int& n)// сортировка по дате пол�
         }
     }
     Output_struct(p, n);
+    return;
 }
 void del(product p[],int& n)// удаление данных
 {
@@ -284,7 +289,8 @@ void del(product p[],int& n)// удаление данных
     {
         printf("Не удалили\n");
         Output_struct(p, n);
-    } 
+    }
+    return;
 }
 void Bin_search(product p[], int& n)// бинарный поиск
 {
@@ -313,8 +319,9 @@ void Bin_search(product p[], int& n)// бинарный поиск
             _getch();
         
     }
+    return;
 }
-int product_inp(product p[],int& num)// функция ввода данных о товаре.
+void product_inp(product p[],int& num)// функция ввода данных о товаре.
 {
     
     while (num < N)
@@ -331,133 +338,79 @@ int product_inp(product p[],int& num)// функция ввода данных �
         check_date(p[num].day, p[num].month, p[num].year);
         num++;
     }
-
     Output_struct(p, num);
-
-
-    /*printf("Доступные действия\n1 - Сортировать по названия\n2 - Сортировать по дате\n3 - Удалить данные\n4 - сохранить данные\n");
-    int answer;
-    scanf_s("%d", &answer);
-    if (answer == 1)
-    {
-        Sort_Name(p, num);
-        printf("Сортировка по названию:\n");
-        Bin_search(p, num);
-        Save_in_File(p, num);
-    }
-    else if (answer == 2)
-    {
-         Sort_Date(p, num);
-         printf("Сортировка по дате:\n");
-         Bin_search(p, num);
-         Save_in_File(p, num);
-    }
-    else if (answer == 3)
-    {
-        del(p, num);
-    }
-    else if (answer == 4)
-    {
-        Save_in_File(p, num);
-    }*/
-    return num;
+    return;
 }
-void menu(product array[], int& num)// меню
+void add_data(product p[], int& num)// функция ввода данных о товаре.
 {
-    /*int start;
-    printf("Доступные действия:\nВвести данные о товарах (1)\nЗагрузить данные из файла (2)\nВвод: ");
-    scanf("%d", &start);
-    if (start == 1)
-        product_inp(array);
-    else if (start == 2)
-        Load_from_File(array, n);
-    else
-        printf("Такого действия нету");
-}*/
+
+    while (num < N)
+    {
+        char dump;
+        printf("Введите название продукта без пробела(Если хотите закончить список введите END в строке 'Ввод').\nВвод: ");
+        scanf("%s", &(p[num].name));
+        if (strcmp(p[num].name, "END") == 0)
+        {
+            break;
+        }
+        scanf("%c", &dump);
+        check_input(p[num].price, p[num].count, p[num].expiration);
+        check_date(p[num].day, p[num].month, p[num].year);
+        num++;
+    }
+    Output_struct(p, num);
+    do
+    {
+        int start = 0;
+        printf("Доступные действия:\n 1 - Ввести данные о товарах,2 - Сохранить данные в файле,\n 3 - Сортировка по дате, 4 - Сортировка по названию, 5 - Бинарный поиск(только после сортировки),\n 6 - удаление данных, 7 - Завершение работы с данным файлом\nВВОД:");
+        scanf("%d", &start);
+        if (start == 1)
+            product_inp(p, num);
+        else if (start == 2)
+            Save_in_File(p, num);
+        else if (start == 3)
+            Sort_Date(p, num);
+        else if (start == 4)
+            Sort_Name(p, num);
+        else if (start == 5)
+            Bin_search(p, num);
+        else if (start == 6)
+            del(p, num);
+        else if (start == 7)
+            menu(p, num);
+        else
+            printf("Такого действия нету");
+    } while (true);
+}
+void menu(product array[],int& n)// меню
+{
     do
     {
         int start;
-        printf("\nДоступные действия:\nВвести данные о товарах (1)\nЗагрузить данные из файла (2)\nВыход(3)\nВвод: ");
+        printf("Доступные действия:\n 1 - Ввести данные о товарах, 2 - Загрузить данные из файла, 3 - Сохранить данные в файле,\n 4 - Сортировка по дате, 5 - Сортировка по названию, 6 - Бинарный поиск(только после сортировки),\n 7 - удаление данных, 8 - ВЫХОД\nВВОД:");
         scanf("%d", &start);
         if (start == 1)
-        {
-            product_inp(array,num);
-            printf("Доступные действия\n1 - Сортировать по названия\n2 - Сортировать по дате\n3 - Удалить данные\n4 - сохранить данные\n");
-            int answer;
-            scanf_s("%d", &answer);
-            if (answer == 1)
-            {
-                Sort_Name(array, num);
-                printf("Сортировка по названию:\n");
-                Bin_search(array, num);
-                Save_in_File(array, num);
-            }
-            else if (answer == 2)
-            {
-                Sort_Date(array, num);
-                printf("Сортировка по дате:\n");
-                Bin_search(array, num);
-                Save_in_File(array, num);
-            }
-            else if (answer == 3)
-            {
-                del(array, num);
-            }
-            else if (answer == 4)
-            {
-                Save_in_File(array, num);
-            }
-        }
+            add_data(array,n);
         else if (start == 2)
-        {
-            Load_from_File(array, num);
-            int answer;
-            printf("1 - Сортировать по названию\n2 - Сортировать по дате получения\n3 - Удаления данных\n 4 - Добавить товары\n 5 -Выход\n Ввод:");
-            scanf("%d", &answer);
-            if (answer == 1)
-            {
-                Sort_Name(array, num);
-                Bin_search(array, num);
-                Save_in_File(array, num);
-
-
-            }
-            else if (answer == 2)
-            {
-                Sort_Date(array, num);
-                Bin_search(array, num);
-                Save_in_File(array, num);
-            }
-            else if (answer == 3)
-            {
-                del(array, num);
-                printf("Товар удален\n");
-                Save_in_File(array, num);
-            }
-            else if(answer==4)
-            {
-                product_inp(array, num);
-            }
-            else
-            {
-                printf("Выход");
-                break;
-            }
-        }
-
-        else if(start==3)
-        {
-            printf("Выход");
+            Load_from_File(array, n);
+        else if (start == 3)
+            Save_in_File(array, n);
+        else if (start == 4)
+            Sort_Date(array, n);
+        else if (start == 5)
+            Sort_Name(array, n);
+        else if (start == 6)
+            Bin_search(array, n);
+        else if (start == 7)
+            del(array, n);
+        else if (start == 8)
             return;
-        }
-
         else
             printf("Такого действия нету");
     } while (true);
 }
 int main()
 {
-    int num = 0;
     int n = 0;
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
