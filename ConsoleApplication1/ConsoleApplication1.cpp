@@ -9,7 +9,7 @@
 
 struct product
 {
-    char name[20];
+    char name[N];
     int price;
     int day;
     int month;
@@ -156,7 +156,7 @@ void Save_in_File(product p[], int& n)//сохранение в файл
         return;
     }
 }
-void Load_from_File(product p[], int& n)//загрузка из файла в массив стуктур
+void Load_from_File(product p[], int& num)//загрузка из файла в массив стуктур
 {
     int i = 0;
     char fname[N];
@@ -171,13 +171,13 @@ void Load_from_File(product p[], int& n)//загрузка из файла в м
     else
     {
         fseek(f, 0L, 2); // Позиционируем указатель на конец файла
-        n = ftell(f) / sizeof(product); // Определяем количество записей в файле
+        num = ftell(f) / sizeof(product); // Определяем количество записей в файле
         rewind(f); // Позиционируем указатель на начало файла
-        fread(p, sizeof(product), n, f); // Копируем записи из файла
+        fread(p, sizeof(product), num, f); // Копируем записи из файла
         fclose(f); // Закрываем файл
     }
-    Output_struct(p, n);
-    int answer;
+    Output_struct(p, num);
+    /*int answer;
     printf("1 - Сортировать по названию\n2 - Сортировать по дате получения\n3 - Удаления данных\n Ввод:");
     scanf("%d", &answer);
     if (answer == 1)
@@ -199,8 +199,8 @@ void Load_from_File(product p[], int& n)//загрузка из файла в м
         del(p, n);
         printf("Товар удален\n");
         Save_in_File(p, n);
-    }
-
+    }*/
+    
 }
 void Sort_Name(product p[], int& n)// сортирока по названию товара
 {
@@ -218,22 +218,6 @@ void Sort_Name(product p[], int& n)// сортирока по названию �
     }
     Output_struct(p, n);
 }
-//void Sort_Date(product p[], int& n)// сортировка по дате получения
-//{
-//    for (int i = 0; i < n - 1; i++)
-//    {
-//        for (int j = i + 1; j < n; j++)
-//        {
-//            if (p[i].day + p[i].month + p[i].year > p[j].day + p[j].month + p[j].year)
-//            {
-//                product temp = p[j];
-//                p[j] = p[i];
-//                p[i] = temp;
-//            }
-//        }
-//    }
-//    Output_struct(p, n);
-//}
 void Sort_Date(product p[], int& n)// сортировка по дате получения
 {
     for (int i = 0; i < n - 1; i++)
@@ -330,9 +314,9 @@ void Bin_search(product p[], int& n)// бинарный поиск
         
     }
 }
-void product_inp(product p[])// функция ввода данных о товаре.
+int product_inp(product p[],int& num)// функция ввода данных о товаре.
 {
-    int num = 0;
+    
     while (num < N)
     {
         char dump;
@@ -350,7 +334,8 @@ void product_inp(product p[])// функция ввода данных о тов
 
     Output_struct(p, num);
 
-    printf("Доступные действия\n1 - Сортировать по названия\n2 - Сортировать по дате\n3 - Удалить данные\n4 - сохранить данные\n");
+
+    /*printf("Доступные действия\n1 - Сортировать по названия\n2 - Сортировать по дате\n3 - Удалить данные\n4 - сохранить данные\n");
     int answer;
     scanf_s("%d", &answer);
     if (answer == 1)
@@ -374,11 +359,12 @@ void product_inp(product p[])// функция ввода данных о тов
     else if (answer == 4)
     {
         Save_in_File(p, num);
-    }
+    }*/
+    return num;
 }
-void menu(product array[],int& n)// меню
+void menu(product array[], int& num)// меню
 {
-    int start;
+    /*int start;
     printf("Доступные действия:\nВвести данные о товарах (1)\nЗагрузить данные из файла (2)\nВвод: ");
     scanf("%d", &start);
     if (start == 1)
@@ -387,9 +373,91 @@ void menu(product array[],int& n)// меню
         Load_from_File(array, n);
     else
         printf("Такого действия нету");
+}*/
+    do
+    {
+        int start;
+        printf("\nДоступные действия:\nВвести данные о товарах (1)\nЗагрузить данные из файла (2)\nВыход(3)\nВвод: ");
+        scanf("%d", &start);
+        if (start == 1)
+        {
+            product_inp(array,num);
+            printf("Доступные действия\n1 - Сортировать по названия\n2 - Сортировать по дате\n3 - Удалить данные\n4 - сохранить данные\n");
+            int answer;
+            scanf_s("%d", &answer);
+            if (answer == 1)
+            {
+                Sort_Name(array, num);
+                printf("Сортировка по названию:\n");
+                Bin_search(array, num);
+                Save_in_File(array, num);
+            }
+            else if (answer == 2)
+            {
+                Sort_Date(array, num);
+                printf("Сортировка по дате:\n");
+                Bin_search(array, num);
+                Save_in_File(array, num);
+            }
+            else if (answer == 3)
+            {
+                del(array, num);
+            }
+            else if (answer == 4)
+            {
+                Save_in_File(array, num);
+            }
+        }
+        else if (start == 2)
+        {
+            Load_from_File(array, num);
+            int answer;
+            printf("1 - Сортировать по названию\n2 - Сортировать по дате получения\n3 - Удаления данных\n 4 - Добавить товары\n 5 -Выход\n Ввод:");
+            scanf("%d", &answer);
+            if (answer == 1)
+            {
+                Sort_Name(array, num);
+                Bin_search(array, num);
+                Save_in_File(array, num);
+
+
+            }
+            else if (answer == 2)
+            {
+                Sort_Date(array, num);
+                Bin_search(array, num);
+                Save_in_File(array, num);
+            }
+            else if (answer == 3)
+            {
+                del(array, num);
+                printf("Товар удален\n");
+                Save_in_File(array, num);
+            }
+            else if(answer==4)
+            {
+                product_inp(array, num);
+            }
+            else
+            {
+                printf("Выход");
+                break;
+            }
+        }
+
+        else if(start==3)
+        {
+            printf("Выход");
+            return;
+        }
+
+        else
+            printf("Такого действия нету");
+    } while (true);
 }
 int main()
 {
+    int num = 0;
     int n = 0;
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
